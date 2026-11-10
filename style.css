@@ -1,0 +1,408 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f7f6ff;
+    color: #292545;
+    line-height: 1.7;
+}
+
+/* NAVIGASI */
+.navbar {
+    background: white;
+    padding: 18px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.06);
+}
+
+.navbar h2 {
+    color: #7054d8;
+}
+
+.nav-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #39334f;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.nav-links a:hover {
+    color: #7054d8;
+}
+
+/* BERANDA */
+.hero {
+    min-height: 480px;
+    padding: 70px 10%;
+    background: linear-gradient(135deg, #7054d8, #a18af2);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.hero-content {
+    flex: 1;
+    min-width: 280px;
+    max-width: 550px;
+}
+
+.label-hero {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.hero h1 {
+    font-size: 38px;
+    line-height: 1.3;
+    margin-bottom: 20px;
+}
+
+.hero-content > p:not(.label-hero) {
+    font-size: 17px;
+    margin-bottom: 30px;
+}
+
+.tombol {
+    display: inline-block;
+    background: white;
+    color: #7054d8;
+    padding: 13px 28px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.tombol:hover {
+    background: #eee9ff;
+    transform: translateY(-3px);
+}
+
+/* ILUSTRASI ANGKA */
+.ilustrasi-angka {
+    flex: 1;
+    min-width: 260px;
+    max-width: 390px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    padding: 25px;
+    background: rgba(255,255,255,0.15);
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 25px;
+    transform: rotate(2deg);
+}
+
+.angka {
+    height: 90px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 18px;
+    font-size: 35px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.angka:hover {
+    transform: translateY(-7px) rotate(-5deg);
+}
+
+.angka-ganjil {
+    background: #ffe4a8;
+    color: #80531b;
+}
+
+.angka-genap {
+    background: #d9eaff;
+    color: #315b9c;
+}
+
+/* BAGIAN UMUM */
+section {
+    padding: 65px 10%;
+    text-align: center;
+}
+
+section h2 {
+    font-size: 28px;
+    color: #7054d8;
+    margin-bottom: 20px;
+}
+
+section > p {
+    max-width: 750px;
+    margin: 12px auto;
+}
+
+/* TUJUAN */
+.tujuan {
+    background: white;
+}
+
+.tujuan-container {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    flex-wrap: wrap;
+    margin-top: 30px;
+}
+
+.tujuan-card {
+    background: #f7f4ff;
+    width: 280px;
+    padding: 30px 22px;
+    border-radius: 18px;
+    border: 1px solid #e8e0ff;
+    transition: 0.3s;
+}
+
+.tujuan-card:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 8px 20px rgba(75,58,130,0.12);
+}
+
+.ikon-tujuan {
+    font-size: 38px;
+    margin-bottom: 12px;
+}
+
+.tujuan-card h3 {
+    color: #7054d8;
+    margin-bottom: 10px;
+}
+
+/* MATERI */
+.kartu-container {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    flex-wrap: wrap;
+    margin-top: 30px;
+}
+
+.kartu {
+    background: white;
+    padding: 30px;
+    border-radius: 18px;
+    width: 300px;
+    box-shadow: 0 5px 20px rgba(75,58,130,0.09);
+    transition: 0.3s;
+}
+
+.kartu:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 10px 25px rgba(75,58,130,0.15);
+}
+
+.kartu h3 {
+    color: #7054d8;
+    margin-bottom: 12px;
+}
+
+.contoh {
+    color: #7054d8;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+/* TABEL */
+.tabel-container {
+    overflow-x: auto;
+    margin-top: 25px;
+}
+
+table {
+    width: 100%;
+    max-width: 750px;
+    margin: auto;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+th {
+    background: #7054d8;
+    color: white;
+}
+
+th, td {
+    padding: 15px;
+    border: 1px solid #eee9ff;
+}
+
+/* LATIHAN */
+#latihan, #kuis {
+    background: #f0edff;
+}
+
+.area-latihan {
+    margin-top: 20px;
+}
+
+input {
+    padding: 13px;
+    width: 230px;
+    border: 2px solid #d5cafa;
+    border-radius: 10px;
+    margin: 15px 5px;
+    font-size: 16px;
+    outline: none;
+}
+
+input:focus {
+    border-color: #7054d8;
+}
+
+button {
+    padding: 12px 22px;
+    border: none;
+    border-radius: 10px;
+    background: #7054d8;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #5740b5;
+    transform: translateY(-2px);
+}
+
+#hasil, #feedback, #skor {
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+/* KUIS */
+.soal-kuis {
+    background: white;
+    max-width: 600px;
+    margin: 30px auto 0;
+    padding: 35px;
+    border-radius: 18px;
+    box-shadow: 0 5px 20px rgba(75,58,130,0.09);
+}
+
+.label-kuis {
+    color: #7054d8;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+}
+
+.soal-kuis h3 {
+    margin-bottom: 25px;
+}
+
+.pilihan-jawaban {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+/* TENTANG */
+.tentang {
+    background: white;
+}
+
+.info-aplikasi {
+    max-width: 550px;
+    margin: 25px auto 0;
+    padding: 25px;
+    text-align: left;
+    background: #f7f4ff;
+    border: 1px solid #e8e0ff;
+    border-radius: 15px;
+}
+
+.info-aplikasi p {
+    margin: 8px 0;
+}
+
+/* FOOTER */
+footer {
+    background: #33275f;
+    color: white;
+    text-align: center;
+    padding: 30px 15px;
+}
+
+footer h3 {
+    margin-bottom: 8px;
+}
+
+/* TAMPILAN HP */
+@media (max-width: 700px) {
+    .navbar {
+        flex-direction: column;
+    }
+
+    .nav-links {
+        justify-content: center;
+        gap: 12px;
+    }
+
+    .hero {
+        flex-direction: column;
+        text-align: center;
+        padding: 55px 7%;
+    }
+
+    .hero h1 {
+        font-size: 29px;
+    }
+
+    .ilustrasi-angka {
+        width: 100%;
+        max-width: 350px;
+    }
+
+    .angka {
+        height: 75px;
+        font-size: 28px;
+    }
+
+    section {
+        padding: 45px 6%;
+    }
+
+    .tujuan-card, .kartu {
+        width: 100%;
+    }
+
+    .soal-kuis {
+        padding: 25px 15px;
+    }
+}

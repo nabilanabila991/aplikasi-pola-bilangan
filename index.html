@@ -1,0 +1,209 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GanjilGenap - Belajar Matematika</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- NAVIGASI -->
+    <nav class="navbar">
+        <h2>GanjilGenap</h2>
+        <div class="nav-links">
+            <a href="#beranda">Beranda</a>
+            <a href="#tujuan">Tujuan</a>
+            <a href="#materi">Materi</a>
+            <a href="#latihan">Latihan</a>
+            <a href="#kuis">Kuis</a>
+            <a href="#tentang">Tentang</a>
+        </div>
+    </nav>
+
+    <!-- BERANDA -->
+    <header id="beranda" class="hero">
+        <div class="hero-content">
+            <p class="label-hero">BELAJAR MATEMATIKA JADI MENYENANGKAN</p>
+            <h1>Yuk, Kenali Bilangan Ganjil dan Genap!</h1>
+            <p>
+                Belajar mengenal bilangan ganjil dan genap melalui
+                materi, contoh, latihan, dan kuis interaktif.
+            </p>
+            <a href="#materi" class="tombol">Mulai Belajar</a>
+        </div>
+
+        <div class="ilustrasi-angka">
+            <div class="angka angka-ganjil">1</div>
+            <div class="angka angka-genap">2</div>
+            <div class="angka angka-ganjil">3</div>
+            <div class="angka angka-genap">4</div>
+            <div class="angka angka-ganjil">5</div>
+            <div class="angka angka-genap">6</div>
+        </div>
+    </header>
+
+    <main>
+
+        <!-- TUJUAN PEMBELAJARAN -->
+        <section id="tujuan" class="tujuan">
+            <h2>Tujuan Pembelajaran</h2>
+            <p>Setelah menggunakan aplikasi ini, siswa diharapkan mampu:</p>
+
+            <div class="tujuan-container">
+                <div class="tujuan-card">
+                    <div class="ikon-tujuan">📚</div>
+                    <h3>Memahami</h3>
+                    <p>Mengenal pengertian bilangan ganjil dan genap.</p>
+                </div>
+
+                <div class="tujuan-card">
+                    <div class="ikon-tujuan">🔢</div>
+                    <h3>Membedakan</h3>
+                    <p>Membedakan bilangan ganjil dan genap berdasarkan cirinya.</p>
+                </div>
+
+                <div class="tujuan-card">
+                    <div class="ikon-tujuan">🎯</div>
+                    <h3>Menerapkan</h3>
+                    <p>Menentukan jenis bilangan melalui latihan dan kuis.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- MATERI -->
+        <section id="materi">
+            <h2>Mengenal Bilangan Ganjil dan Genap</h2>
+            <p>
+                Bilangan ganjil dan genap merupakan bagian dari bilangan
+                bulat yang dapat ditemukan dalam kehidupan sehari-hari.
+            </p>
+
+            <div class="kartu-container">
+                <div class="kartu">
+                    <h3>Bilangan Genap</h3>
+                    <p>
+                        Bilangan genap adalah bilangan yang dapat dibagi
+                        2 tanpa sisa.
+                    </p>
+                    <p class="contoh">2, 4, 6, 8, 10, 12</p>
+                </div>
+
+                <div class="kartu">
+                    <h3>Bilangan Ganjil</h3>
+                    <p>
+                        Bilangan ganjil adalah bilangan yang jika dibagi
+                        2 memiliki sisa 1.
+                    </p>
+                    <p class="contoh">1, 3, 5, 7, 9, 11</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CARA MEMBEDAKAN -->
+        <section class="cara-membedakan">
+            <h2>Bagaimana Cara Membedakannya?</h2>
+            <p>
+                Perhatikan angka terakhir dari suatu bilangan.
+                Jika angka terakhirnya 0, 2, 4, 6, atau 8,
+                maka bilangan tersebut termasuk genap.
+            </p>
+            <p>
+                Jika angka terakhirnya 1, 3, 5, 7, atau 9,
+                maka bilangan tersebut termasuk ganjil.
+            </p>
+
+            <div class="tabel-container">
+                <table>
+                    <tr>
+                        <th>Jenis Bilangan</th>
+                        <th>Angka Terakhir</th>
+                        <th>Contoh</th>
+                    </tr>
+                    <tr>
+                        <td>Genap</td>
+                        <td>0, 2, 4, 6, 8</td>
+                        <td>12, 24, 36</td>
+                    </tr>
+                    <tr>
+                        <td>Ganjil</td>
+                        <td>1, 3, 5, 7, 9</td>
+                        <td>13, 25, 37</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+
+        <!-- LATIHAN -->
+        <section id="latihan">
+            <h2>Yuk, Coba Sendiri!</h2>
+            <p>
+                Masukkan sebuah bilangan bulat untuk mengetahui
+                apakah bilangan tersebut ganjil atau genap.
+            </p>
+
+            <div class="area-latihan">
+                <input type="number" id="angka" placeholder="Masukkan bilangan">
+                <button type="button" onclick="periksaAngka()">Periksa Jawaban</button>
+                <p id="hasil" aria-live="polite"></p>
+            </div>
+        </section>
+
+        <!-- KUIS -->
+        <section id="kuis">
+            <h2>Kuis Ganjil dan Genap</h2>
+            <p>Jawablah lima pertanyaan berikut dengan benar!</p>
+
+            <div class="soal-kuis">
+                <div class="label-kuis">UJI PEMAHAMANMU</div>
+                <h3 id="pertanyaan"></h3>
+
+                <div class="pilihan-jawaban">
+                    <button type="button" onclick="jawabKuis('Ganjil')">Ganjil</button>
+                    <button type="button" onclick="jawabKuis('Genap')">Genap</button>
+                </div>
+
+                <p id="feedback" aria-live="polite"></p>
+                <p id="nomor-soal"></p>
+                <p id="skor"></p>
+
+                <button type="button" id="lanjut" onclick="soalBerikutnya" style="display:none;">
+                    Soal Berikutnya
+                </button>
+
+                <button type="button" id="ulangi" onclick="ulangiKuis()" style="display:none;">
+                    Ulangi Kuis
+                </button>
+            </div>
+        </section>
+
+        <!-- TENTANG APLIKASI -->
+        <section id="tentang" class="tentang">
+            <h2>Tentang Aplikasi</h2>
+            <p>
+                GanjilGenap merupakan aplikasi pembelajaran matematika
+                interaktif yang dibuat untuk membantu siswa memahami
+                bilangan ganjil dan genap dengan cara yang menyenangkan.
+            </p>
+
+            <div class="info-aplikasi">
+                <p><strong>Nama Aplikasi:</strong> GanjilGenap</p>
+                <p><strong>Mata Pelajaran:</strong> Matematika</p>
+                <p><strong>Materi:</strong> Bilangan Ganjil dan Genap</p>
+                <p><strong>Pembuat:</strong> Mafatihun Nabila</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <h3>GanjilGenap</h3>
+        <p>Belajar Matematika dengan Cara yang Menyenangkan</p>
+        <p>© 2026 Aplikasi Pembelajaran Matematika</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
