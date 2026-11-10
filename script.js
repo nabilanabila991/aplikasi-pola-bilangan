@@ -1,4 +1,3 @@
-
 // FITUR LATIHAN
 function periksaAngka() {
     const input = document.getElementById("angka");
@@ -27,7 +26,7 @@ function periksaAngka() {
     hasil.style.color = "green";
 }
 
-// DATA KUIS
+// DATA KUIS: 10 SOAL
 const daftarSoal = [
     {
         pertanyaan: "Angka 7 termasuk bilangan apa?",
@@ -48,6 +47,26 @@ const daftarSoal = [
     {
         pertanyaan: "Angka 23 termasuk bilangan apa?",
         jawaban: "Ganjil"
+    },
+    {
+        pertanyaan: "Angka 36 termasuk bilangan apa?",
+        jawaban: "Genap"
+    },
+    {
+        pertanyaan: "Angka 51 termasuk bilangan apa?",
+        jawaban: "Ganjil"
+    },
+    {
+        pertanyaan: "Angka 100 termasuk bilangan apa?",
+        jawaban: "Genap"
+    },
+    {
+        pertanyaan: "Hasil dari 8 + 5 adalah 13. Termasuk bilangan apa?",
+        jawaban: "Ganjil"
+    },
+    {
+        pertanyaan: "Hasil dari 6 × 4 adalah 24. Termasuk bilangan apa?",
+        jawaban: "Genap"
     }
 ];
 
@@ -84,7 +103,7 @@ function jawabKuis(pilihan) {
     const feedback = document.getElementById("feedback");
 
     if (pilihan === jawabanBenar) {
-        nilai += 20;
+        nilai += 10;
         feedback.textContent = "Benar! Jawaban kamu tepat.";
         feedback.style.color = "green";
     } else {
