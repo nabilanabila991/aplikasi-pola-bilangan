@@ -1,13 +1,21 @@
 
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+const sleep = (ms) =>
+  new Promise((resolve) => setTimeout(resolve, ms))
+
+const MODEL = 'gemini-3.5-flash-lite'
+
+const GEMINI_URL =
+  `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:streamGenerateContent?alt=sse`
 
 export default async function handler(req, res) {
+  // Memastikan permintaan menggunakan POST.
   if (req.method !== 'POST') {
     return res.status(405).json({
       error: 'Metode tidak diizinkan.'
     })
   }
 
+  // Menggunakan API Key yang sudah ada di Vercel.
   const apiKey = process.env.GEMINI_API_KEY
 
   if (!apiKey) {
@@ -25,21 +33,25 @@ export default async function handler(req, res) {
       })
     }
 
-    // Menyiapkan riwayat percakapan Gemini.
+    // Membatasi riwayat agar permintaan lebih ringan.
     const conversation = messages
-      .slice(-20)
+      .slice(-12)
       .map((message) => ({
-        role: message.role === 'assistant' ? 'model' : 'user',
+        role:
+          message.role === 'assistant' ? 'model' : 'user',
         text: String(message.content || '').trim()
       }))
       .filter((message) => message.text.length > 0)
 
-    // Gemini harus memulai riwayat dengan pesan pengguna.
-    while (conversation.length > 0 && conversation[0].role === 'model') {
+    // Percakapan harus dimulai dari pesan pengguna.
+    while (
+      conversation.length > 0 &&
+      conversation[0].role === 'model'
+    ) {
       conversation.shift()
     }
 
-    // Menggabungkan pesan dengan peran yang sama.
+    // Menyusun riwayat percakapan.
     const contents = []
 
     for (const message of conversation) {
@@ -64,52 +76,45 @@ export default async function handler(req, res) {
       })
     }
 
+    // Instruksi AI Pembimbing Matematika.
     const systemInstruction = `
-Kamu adalah AI Pembimbing Matematika pada aplikasi GanjilGenap
-untuk siswa SMP kelas 7.
+Kamu adalah Kak Aritma, AI Pembimbing Matematika
+pada aplikasi GanjilGenap untuk siswa SMP kelas 7.
 
 Fokus pembelajaran:
 - Bilangan ganjil dan genap.
 - Pola bilangan.
-- Operasi penjumlahan dan perkalian.
+- Penjumlahan dan perkalian.
 - Pembagian.
 - Literasi matematika.
 
-ATURAN PEMBELAJARAN:
-
+Aturan pembelajaran:
 1. Bersikap ramah, sabar, dan interaktif.
-2. Jangan langsung memberikan jawaban akhir soal.
-3. Gunakan metode scaffolding secara bertahap.
-4. Ajak siswa mengamati informasi dalam soal.
-5. Bantu siswa menemukan pola atau konsep matematika.
-6. Berikan petunjuk kecil secara bertahap.
-7. Ajukan pertanyaan agar siswa berpikir sendiri.
-8. Minta siswa mencoba menyelesaikan langkah berikutnya.
-9. Jika siswa salah, jelaskan dengan lembut.
-10. Jika siswa kesulitan, berikan petunjuk lebih sederhana.
-11. Gunakan bahasa Indonesia yang mudah dipahami.
-12. Jangan langsung memberikan seluruh penyelesaian.
-13. Arahkan pertanyaan di luar matematika kembali
-    ke pembelajaran matematika dengan sopan.
+2. Gunakan bahasa Indonesia sederhana.
+3. Bimbing siswa secara bertahap.
+4. Jangan langsung memberikan jawaban akhir.
+5. Ajak siswa mengamati informasi pada soal.
+6. Berikan petunjuk kecil agar siswa berpikir.
+7. Ajukan satu pertanyaan sederhana dalam satu waktu.
+8. Jika siswa salah, jelaskan dengan lembut.
+9. Jika siswa kesulitan, berikan contoh sederhana.
+10. Arahkan pembicaraan kembali ke matematika
+    jika pertanyaan tidak berkaitan dengan pembelajaran.
 
 Contoh:
 Jika siswa bertanya apakah 127 ganjil atau genap,
-jangan langsung menjawab.
-Tanyakan angka terakhir dari 127 terlebih dahulu,
-kemudian tuntun siswa memahami pembagian dengan 2.
+tanyakan terlebih dahulu angka terakhir dari 127.
+Kemudian bimbing siswa menentukan jawabannya.
 `
 
-    const url =
-      'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:streamGenerateContent?alt=sse'
-
     let geminiResponse = null
-    let errorMessage = ''
-    let errorStatus = 502
 
-    // Maksimal 3 percobaan jika layanan Gemini sedang sibuk.
-    for (let attempt = 0; attempt < 3; attempt++) {
+    // Maksimal dua percobaan untuk gangguan sementara.
+    for (let attempt = 0; attempt < 2; attempt++) {
+      let response
+
       try {
-        geminiResponse = await fetch(url, {
+        response = await fetch(GEMINI_URL, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -121,62 +126,102 @@ kemudian tuntun siswa memahami pembagian dengan 2.
             },
             contents,
             generationConfig: {
-              maxOutputTokens: 700
+              maxOutputTokens: 350,
+              thinkingConfig: {
+                thinkingLevel: 'minimal'
+              }
             }
           })
         })
-
-        if (geminiResponse.ok) {
-          break
-        }
-
-        errorStatus = geminiResponse.status
-        errorMessage = await geminiResponse.text()
-
-        console.error('Gemini API Error:', errorMessage)
-
-        const temporaryError = [429, 500, 502, 503, 504]
-          .includes(errorStatus)
-
-        if (!temporaryError || attempt === 2) {
-          break
-        }
-
       } catch (error) {
-        errorMessage = error.message
-        console.error('Gemini Request Error:', errorMessage)
+        console.error('Koneksi Gemini gagal:', error.message)
 
-        if (attempt === 2) {
-          break
+        if (attempt === 0) {
+          await sleep(500)
+          continue
         }
+
+        return res.status(502).json({
+          error: 'Koneksi ke Gemini gagal. Silakan coba kembali.'
+        })
       }
 
-      // Jeda 1 detik, lalu 2 detik sebelum mencoba kembali.
-      await sleep(1000 * (attempt + 1))
-    }
+      if (response.ok) {
+        geminiResponse = response
+        break
+      }
 
-    if (!geminiResponse || !geminiResponse.ok) {
-      if (errorStatus === 503 || errorStatus === 429) {
-        return res.status(errorStatus).json({
-          error: 'Layanan Gemini sedang sibuk. Silakan coba kembali.'
+      const errorDetails = await response.text()
+
+      console.error(
+        'Gemini API Error:',
+        response.status,
+        errorDetails
+      )
+
+      // Mencoba satu kali lagi jika layanan sedang sibuk.
+      if (
+        [429, 503].includes(response.status) &&
+        attempt === 0
+      ) {
+        await sleep(700)
+        continue
+      }
+
+      if (response.status === 429 || response.status === 503) {
+        return res.status(503).json({
+          error: 'Gemini sedang sibuk. Silakan coba kembali.'
+        })
+      }
+
+      if (response.status === 403) {
+        return res.status(502).json({
+          error: 'Akses API Gemini ditolak. Periksa konfigurasi API Key.'
+        })
+      }
+
+      if (response.status === 404) {
+        return res.status(502).json({
+          error: 'Model Gemini tidak ditemukan.'
         })
       }
 
       return res.status(502).json({
-        error: 'Gemini belum dapat memproses permintaan.'
+        error: 'Gemini gagal memproses pesan.'
       })
     }
 
-    res.setHeader('Content-Type', 'text/plain; charset=utf-8')
-    res.setHeader('Cache-Control', 'no-cache, no-transform')
-    res.setHeader('Connection', 'keep-alive')
+    if (!geminiResponse || !geminiResponse.body) {
+      return res.status(502).json({
+        error: 'Gemini tidak memberikan respons.'
+      })
+    }
+
+    // Mengaktifkan respons streaming.
+    res.setHeader(
+      'Content-Type',
+      'text/plain; charset=utf-8'
+    )
+    res.setHeader(
+      'Cache-Control',
+      'no-cache, no-transform'
+    )
+    res.setHeader(
+      'Connection',
+      'keep-alive'
+    )
+
+    if (typeof res.flushHeaders === 'function') {
+      res.flushHeaders()
+    }
 
     const reader = geminiResponse.body.getReader()
     const decoder = new TextDecoder()
 
     let buffer = ''
 
-    const processLine = (line) => {
+    // Membaca setiap potongan jawaban dari Gemini.
+    function processLine(line) {
       if (!line.startsWith('data:')) return
 
       const data = line.slice(5).trim()
@@ -186,15 +231,22 @@ kemudian tuntun siswa memahami pembagian dengan 2.
       try {
         const parsed = JSON.parse(data)
 
-        const text = parsed.candidates?.[0]?.content?.parts
-          ?.map((part) => part.text || '')
+        const parts =
+          parsed.candidates?.[0]?.content?.parts || []
+
+        const answer = parts
+          .filter((part) => !part.thought)
+          .map((part) => part.text || '')
           .join('')
 
-        if (text) {
-          res.write(text)
+        if (answer && !res.destroyed) {
+          res.write(answer)
         }
       } catch (error) {
-        console.error('Kesalahan membaca streaming:', error.message)
+        console.error(
+          'Kesalahan membaca streaming:',
+          error.message
+        )
       }
     }
 
@@ -204,7 +256,9 @@ kemudian tuntun siswa memahami pembagian dengan 2.
 
         if (done) break
 
-        buffer += decoder.decode(value, { stream: true })
+        buffer += decoder.decode(value, {
+          stream: true
+        })
 
         const lines = buffer.split(/\r?\n/)
         buffer = lines.pop() || ''
@@ -220,8 +274,9 @@ kemudian tuntun siswa memahami pembagian dengan 2.
         processLine(buffer.trim())
       }
 
-      res.end()
-
+      if (!res.destroyed) {
+        res.end()
+      }
     } finally {
       reader.releaseLock()
     }
@@ -235,6 +290,8 @@ kemudian tuntun siswa memahami pembagian dengan 2.
       })
     }
 
-    res.end()
+    if (!res.destroyed) {
+      res.end()
+    }
   }
 }
